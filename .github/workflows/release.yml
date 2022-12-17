@@ -74,7 +74,7 @@ jobs:
       - run: echo prevtag is ${{ steps.tag.outputs.prevtag }}
       - run: echo line_count is ${{ steps.tag.outputs.line_count }}
       - run: cat body.log
-        -
+
       - name: Generate release tag
           uses: amitsingh-007/next-release-tag@v1.0.0
           with:
