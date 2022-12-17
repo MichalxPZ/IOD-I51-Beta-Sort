@@ -8,6 +8,5 @@ public class SortingMadnessApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(pl.put.poznan.sorting_madness.app.SortingMadnessApplication.class, args);
-        System.out.println("Hello");
     }
 }
