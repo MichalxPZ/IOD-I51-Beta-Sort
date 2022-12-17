@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,15 +11,13 @@
     </parent>
 
     <groupId>pl.put.poznan</groupId>
-    <artifactId>io-project-architecture</artifactId>
-    <version>0.1</version>
+    <artifactId>beta-sort</artifactId>
+    <version>1.0.0</version>
 
 	<properties>
         <java.version>11</java.version>
         <kotlin.version>1.8.0-RC</kotlin.version>
     </properties>
-
-
     <dependencies>
         <dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -148,6 +145,7 @@
             <url>https://repo.spring.io/libs-release</url>
         </pluginRepository>
     </pluginRepositories>
+
 
 
 </project>
