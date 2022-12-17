@@ -12,9 +12,9 @@
      - any: ['src/**/*.css']
      - any: ['src/**/*.html']
 
-  backend:
-    - any: [ 'src/**/rest/*' ]
-  app:
-    - any: [ 'src/**/app/*' ]
-  logic:
-    - any: [ 'src/**/logic/*' ]
+   backend:
+     - any: [ 'src/**/rest/*']
+   app:
+     - any: [ 'src/**/app/*']
+   logic:
+     - any: [ 'src/**/logic/*']
