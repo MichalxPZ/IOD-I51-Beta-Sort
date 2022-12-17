@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Generate release tag
-        uses: MichalxPZ/next-release-tag@v1.0.0
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
