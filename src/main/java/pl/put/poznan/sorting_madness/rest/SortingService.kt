@@ -18,14 +18,16 @@ class SortingService {
             runAllAlgorithms<String>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
-                data = requestModel.data
+                data = requestModel.data,
+                order = requestModel.sortingOrder
             )
         } else {
             runAlgorithm<String>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
-                algorithm = requestModel.algorithm
+                algorithm = requestModel.algorithm,
+                order = requestModel.sortingOrder
             )
         }
     }
@@ -36,14 +38,16 @@ class SortingService {
             runAllAlgorithms<Int>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
-                data = requestModel.data
+                data = requestModel.data,
+                order = requestModel.sortingOrder
             )
         } else {
             runAlgorithm<Int>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
-                algorithm = requestModel.algorithm
+                algorithm = requestModel.algorithm,
+                order = requestModel.sortingOrder
             )
         }
     }
@@ -54,14 +58,16 @@ class SortingService {
             runAllAlgorithms<Float>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
-                data = requestModel.data
+                data = requestModel.data,
+                order = requestModel.sortingOrder
             )
         } else {
             runAlgorithm<Float>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
-                algorithm = requestModel.algorithm
+                algorithm = requestModel.algorithm,
+                order = requestModel.sortingOrder
             )
         }
     }
@@ -72,14 +78,16 @@ class SortingService {
             runAllAlgorithms<JSONObject>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
-                data = requestModel.data
+                data = requestModel.data,
+                order = requestModel.sortingOrder
             )
         } else {
             runAlgorithm<JSONObject>(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
-                algorithm = requestModel.algorithm
+                algorithm = requestModel.algorithm,
+                order = requestModel.sortingOrder
             )
         }
     }
@@ -87,15 +95,16 @@ class SortingService {
     private fun <T> runAlgorithm(
         algorithm: Algorithm,
         numOfIterations: Int?,
-        order: SortingOrder = SortingOrder.ASCENDING,
+        order: SortingOrder?,
         property: String?,
-        data: ArrayList<T> ): ResponseModel<T> {
+        data: ArrayList<T>
+    ): ResponseModel<T> {
 
-        return ResponseModel<T>(
-            sortedData = ArrayList(),
+        return ResponseModel(
+            sortedData = ArrayList<T>(),
             property = property,
-            sortingOrder = order,
-            iterationNumber = 2,
+            sortingOrder = order ?: SortingOrder.ASCENDING,
+            iterationNumber = numOfIterations ?: 0,
             algorithm = algorithm,
             time = null
         )
@@ -103,16 +112,16 @@ class SortingService {
 
     private fun <T> runAllAlgorithms(
         numOfIterations: Int?,
-        order: SortingOrder = SortingOrder.ASCENDING,
+        order: SortingOrder?,
         property: String?,
         data: ArrayList<T>
     ): ResponseModel<T> {
 
         return ResponseModel<T>(
-            sortedData = ArrayList(),
+            sortedData = ArrayList<T>(),
             property = property,
-            sortingOrder = order,
-            iterationNumber = 2,
+            sortingOrder = order ?: SortingOrder.ASCENDING,
+            iterationNumber = numOfIterations ?: 0,
             algorithm = null,
             time = null
         )
