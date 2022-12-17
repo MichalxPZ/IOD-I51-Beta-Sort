@@ -1,2 +1,3 @@
-pl\put\poznan\sorting_madness\app\SortingMadnessApplication.class
 pl\put\poznan\sorting_madness\logic\SortingMadness.class
+pl\put\poznan\sorting_madness\rest\SoprtingMadnessController.class
+pl\put\poznan\sorting_madness\app\SortingMadnessApplication.class
