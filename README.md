@@ -9,4 +9,5 @@
 4. Michał Zieliński 148064 - Project Owner
 
 ![Tests](https://github.com/MichalxPZ/IOD-I51-Beta-Sort/actions/workflows/verify.yml/badge.svg)  
+![Release](https://github.com/MichalxPZ/IOD-I51-Beta-Sort/actions/workflows/release.yml/badge.svg)  
 ![Publish](https://github.com/MichalxPZ/IOD-I51-Beta-Sort/actions/workflows/maven-publish.yml/badge.svg)  
