@@ -17,6 +17,9 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # debug
       - name: Dump env
