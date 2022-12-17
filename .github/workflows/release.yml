@@ -5,7 +5,7 @@ run-name: Create Github Release for Java Spring Boot built with Gradle
 on:
   push:
     branches:
-      - main
+      - action-release
     tags:
       - 'v*'
 
