@@ -1,7 +1,6 @@
 package pl.put.poznan.sorting_madness.rest
 
-import org.json.JSONObject
-import org.json.JSONString
+import com.google.gson.JsonObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import pl.put.poznan.sorting_madness.rest.model.RequestModel
 import pl.put.poznan.sorting_madness.rest.model.ResponseModel
+
 
 @RestController
 class SortingController(
@@ -48,17 +48,17 @@ class SortingController(
                 "num of iterations: " + requestModel.iterationNumber + "\n" +
                 "sorting order: " + requestModel.sortingOrder + "\n"
         )
-        return sortOneDimensionalDataSetFloat(requestModel)
+        return sortingService.sortOneDimensionalDataSetFloat(requestModel)
     }
     @PostMapping("/api/sort/multiDimension")
     private fun sortMultiDimensionalDataSet(
-        @RequestBody requestModel: RequestModel<JSONObject>
-    ) : ResponseModel<JSONObject> {
+        @RequestBody requestModel: RequestModel<JsonObject>
+    ) : ResponseModel<JsonObject> {
         logger.debug("\nSorting provided data set:" + "${requestModel.data}\n"
                 + "with algorithm: " + requestModel.algorithm + "\n" +
                 "num of iterations: " + requestModel.iterationNumber + "\n" +
                 "sorting order: " + requestModel.sortingOrder + "\n" +
-                 "property: " + requestModel.property
+                 "property: " + requestModel.property + "\n"
         )
         return sortingService.sortMultiDimensionalDataSet(requestModel)
     }

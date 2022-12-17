@@ -1,12 +1,9 @@
 package pl.put.poznan.sorting_madness.rest
 
-import org.json.JSONArray
-import org.json.JSONObject
+import com.google.gson.JsonObject
 import org.springframework.stereotype.Service
-import pl.put.poznan.sorting_madness.rest.model.Algorithm
-import pl.put.poznan.sorting_madness.rest.model.RequestModel
-import pl.put.poznan.sorting_madness.rest.model.ResponseModel
-import pl.put.poznan.sorting_madness.rest.model.SortingOrder
+import pl.put.poznan.sorting_madness.rest.model.*
+import java.util.*
 
 @Service
 class SortingService {
@@ -15,14 +12,14 @@ class SortingService {
         requestModel: RequestModel<String>
     ): ResponseModel<String> {
         return if (requestModel.algorithm == null) {
-            runAllAlgorithms<String>(
+            runAllAlgorithms(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 order = requestModel.sortingOrder
             )
         } else {
-            runAlgorithm<String>(
+            runAlgorithm(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
@@ -35,14 +32,14 @@ class SortingService {
         requestModel: RequestModel<Int>
     ): ResponseModel<Int> {
         return if (requestModel.algorithm == null) {
-            runAllAlgorithms<Int>(
+            runAllAlgorithms(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 order = requestModel.sortingOrder
             )
         } else {
-            runAlgorithm<Int>(
+            runAlgorithm(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
@@ -55,14 +52,14 @@ class SortingService {
         requestModel: RequestModel<Float>
     ): ResponseModel<Float> {
         return if (requestModel.algorithm == null) {
-            runAllAlgorithms<Float>(
+            runAllAlgorithms(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 order = requestModel.sortingOrder
             )
         } else {
-            runAlgorithm<Float>(
+            runAlgorithm(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
@@ -72,17 +69,17 @@ class SortingService {
         }
     }
     fun sortMultiDimensionalDataSet(
-        requestModel: RequestModel<JSONObject>
-    ) : ResponseModel<JSONObject> {
+        requestModel: RequestModel<JsonObject>
+    ) : ResponseModel<JsonObject> {
         return if (requestModel.algorithm == null) {
-            runAllAlgorithms<JSONObject>(
+            runAllAlgorithms(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 order = requestModel.sortingOrder
             )
         } else {
-            runAlgorithm<JSONObject>(
+            runAlgorithm(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
@@ -91,6 +88,7 @@ class SortingService {
             )
         }
     }
+
 
     private fun <T> runAlgorithm(
         algorithm: Algorithm,
@@ -101,7 +99,7 @@ class SortingService {
     ): ResponseModel<T> {
 
         return ResponseModel(
-            sortedData = ArrayList<T>(),
+            sortedData = data,
             property = property,
             sortingOrder = order ?: SortingOrder.ASCENDING,
             iterationNumber = numOfIterations ?: 0,
@@ -117,8 +115,8 @@ class SortingService {
         data: ArrayList<T>
     ): ResponseModel<T> {
 
-        return ResponseModel<T>(
-            sortedData = ArrayList<T>(),
+        return ResponseModel(
+            sortedData = data,
             property = property,
             sortingOrder = order ?: SortingOrder.ASCENDING,
             iterationNumber = numOfIterations ?: 0,
@@ -126,4 +124,5 @@ class SortingService {
             time = null
         )
     }
+
 }

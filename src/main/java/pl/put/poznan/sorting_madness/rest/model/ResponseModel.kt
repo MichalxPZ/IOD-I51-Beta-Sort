@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import java.time.LocalDateTime
+import java.util.*
 
 @Data
 @NoArgsConstructor
@@ -14,5 +15,5 @@ data class ResponseModel<T>(
     val sortingOrder: SortingOrder,
     val iterationNumber: Int,
     val algorithm: Algorithm?,
-    val time: LocalDateTime?
+    val time: String?
 )
