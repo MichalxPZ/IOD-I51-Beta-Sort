@@ -1,55 +1,27 @@
 package pl.put.poznan.sorting_alg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class SelectionSort implements Sortable {
 
-    public static void main(String[] args) {
-        // The array to sort
-        List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        // Sort the array
-        List<Integer> sortedArray = selectionSort(array, SortingOrder.ASCENDING);
-
-        // Print the sorted array
-        for (Integer integer : sortedArray) {
-            System.out.print(integer + " ");
-        }
-
-        System.out.println();
-
-        // The array to sort
-        array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        // Sort the array
-        List<Integer> limitedSortedArray = limitedSelectionSort(array, 3, SortingOrder.ASCENDING);
-
-        // Print the sorted array
-        for (Integer integer : limitedSortedArray) {
-            System.out.print(integer + " ");
-        }
-    }
-
-    public static <T extends Comparable<T>> List<T> selectionSort(List<T> array, SortingOrder order) {
+    public static JSONArray selectionSort(JSONArray array, String attr, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
         // Loop through the array
-        for (int i = 0; i < array.size() - 1; i++) {
+        for (int i = 0; i < array.length() - 1; i++) {
             // Find the minimum element in the unsorted part of the array
             int minIndex = i;
-            for (int j = i + 1; j < array.size(); j++) {
-                if (array.get(j).compareTo(array.get(minIndex)) < 0) {
+            for (int j = i + 1; j < array.length(); j++) {
+                if (JSONComparator.compare((JSONObject) array.get(j), (JSONObject) array.get(minIndex), attr) < 0){
                     minIndex = j;
                 }
             }
 
             // Swap the minimum element with the first element in the unsorted part of the array
-            T temp = array.get(i);
-            array.set(i, array.get(minIndex));
-            array.set(minIndex, temp);
+            JSONObject temp = (JSONObject) array.get(i);
+            array.put(i, array.get(minIndex));
+            array.put(minIndex, temp);
         }
         // Record the ending time of the algorithm
         long endTime = System.nanoTime();
@@ -60,46 +32,50 @@ public class SelectionSort implements Sortable {
         if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
-            final List<T> result = new ArrayList<>(array);
-            Collections.reverse(result);
-            return result;
+            JSONArray toReturn = new JSONArray();
+            for (int i = array.length() - 1; i >= 0; i--) {
+                toReturn.put(array.get(i));
+            }
+            return toReturn;
         }
     }
 
-    public static <T extends Comparable<T>> List<T> limitedSelectionSort(List<T> array, int maxIterations, SortingOrder order) {
+    public static JSONArray limitedSelectionSort(JSONArray array, String attr, SortingOrder order, int maxIterations) {
         // Loop through the array
-        for (int i = 0; i < array.size() - 1 && i <= maxIterations; i++) {
+        for (int i = 0; i < array.length() - 1 && i <= maxIterations; i++) {
             // Find the minimum element in the unsorted part of the array
             int minIndex = i;
-            for (int j = i + 1; j < array.size(); j++) {
-                if (array.get(j).compareTo(array.get(minIndex)) < 0) {
+            for (int j = i + 1; j < array.length(); j++) {
+                if (JSONComparator.compare((JSONObject) array.get(j), (JSONObject) array.get(minIndex), attr) < 0) {
                     minIndex = j;
                 }
             }
 
             // Swap the minimum element with the first element in the unsorted part of the array
-            T temp = array.get(i);
-            array.set(i, array.get(minIndex));
-            array.set(minIndex, temp);
+            JSONObject temp = (JSONObject) array.get(i);
+            array.put(i, array.get(minIndex));
+            array.put(minIndex, temp);
         }
 
         // Return the sorted array
         if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
-            final List<T> result = new ArrayList<>(array);
-            Collections.reverse(result);
-            return result;
+            JSONArray toReturn = new JSONArray();
+            for (int i = array.length() - 1; i >= 0; i--) {
+                toReturn.put(array.get(i));
+            }
+            return toReturn;
         }
     }
 
     @Override
-    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
-        return selectionSort(array, order);
+    public JSONArray run(JSONArray array, String attr, SortingOrder order) {
+        return selectionSort(array, attr, order);
     }
 
     @Override
-    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
-        return limitedSelectionSort(array, maxIterations, order);
+    public JSONArray run(JSONArray array, String attr, SortingOrder order, int maxIterations) {
+        return limitedSelectionSort(array, attr, order, maxIterations);
     }
 }

@@ -1,9 +1,9 @@
 package pl.put.poznan.sorting_alg;
 
-import java.util.List;
+import org.json.JSONArray;
 
 public interface Sortable {
-    <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order);
+    JSONArray run(JSONArray array, String attr, SortingOrder order);
 
-    <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order);
+    JSONArray run(JSONArray array, String attr, SortingOrder order, int maxIterations);
 }

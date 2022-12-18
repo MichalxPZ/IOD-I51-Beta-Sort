@@ -1,42 +1,15 @@
 package pl.put.poznan.sorting_alg;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class QuickSort implements Sortable {
-    public static void main(String[] args) {
-        // The array to sort
-        List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
-        // Sort the array
-        List<Integer> sortedArray = quickSort(array, SortingOrder.ASCENDING);
-
-        // Print the sorted array
-        for (Integer integer : sortedArray) {
-            System.out.print(integer + " ");
-        }
-
-        System.out.println();
-
-        // The array to sort
-        array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        // Sort the array
-        List<Integer> limitedSortedArray = limitedQuickSort(array, 1, SortingOrder.ASCENDING);
-
-        // Print the limited sorted array
-        for (Integer integer : limitedSortedArray) {
-            System.out.print(integer + " ");
-        }
-    }
-
-    public static <T extends Comparable<T>> List<T> quickSort(List<T> array, SortingOrder order) {
+    public static JSONArray quickSort(JSONArray array, String attr, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
 
-        quick(array, 0, array.size() - 1);
+        quick(array, 0, array.length() - 1, attr);
         // Record the ending time of the algorithm
         long endTime = System.nanoTime();
         // Print the execution time of the algorithm
@@ -45,13 +18,15 @@ public class QuickSort implements Sortable {
         if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
-            final List<T> result = new ArrayList<>(array);
-            Collections.reverse(result);
-            return result;
+            JSONArray toReturn = new JSONArray();
+            for (int i = array.length() - 1; i >= 0; i--) {
+                toReturn.put(array.get(i));
+            }
+            return toReturn;
         }
     }
 
-    public static <T extends Comparable<T>> List<T> quick(List<T> array, int start, int end) {
+    public static JSONArray quick(JSONArray array, int start, int end, String attr) {
 
         // If the array has length 1 or 0, it is already sorted
         if (end - start < 1) {
@@ -59,19 +34,19 @@ public class QuickSort implements Sortable {
         }
 
         // Choose a pivot element
-        T pivot = array.get(end);
+        JSONObject pivot = (JSONObject) array.get(end);
 
         // Partition the array around the pivot element
-        int partition = partition(array, start, end, pivot);
+        int partition = partition(array, start, end, pivot, attr);
 
         // Sort the left and right partitions
-        quick(array, start, partition - 1);
-        quick(array, partition + 1, end);
+        quick(array, start, partition - 1, attr);
+        quick(array, partition + 1, end, attr);
 
         return array;
     }
 
-    public static <T extends Comparable<T>> List<T> limitedQuick(List<T> array, int start, int end, int maxIterations, SortingOrder order) {
+    public static JSONArray limitedQuick(JSONArray array, int start, int end, String attr, int maxIterations) {
         // If the array has length 1 or 0, it is already sorted
         if (end - start < 1) {
             return array;
@@ -83,39 +58,35 @@ public class QuickSort implements Sortable {
         }
 
         // Choose a pivot element
-        T pivot = array.get(end);
+        JSONObject pivot = (JSONObject) array.get(end);
 
         // Partition the array around the pivot element
-        int partition = partition(array, start, end, pivot);
+        int partition = partition(array, start, end, pivot, attr);
 
         // Decrement the number of iterations
         maxIterations--;
 
         // Sort the left and right partitions
-        limitedQuick(array, start, partition - 1, maxIterations, order);
-        limitedQuick(array, partition + 1, end, maxIterations, order);
+        limitedQuick(array, start, partition - 1, attr, maxIterations);
+        limitedQuick(array, partition + 1, end, attr, maxIterations);
 
+        return array;
+    }
+
+    public static JSONArray limitedQuickSort(JSONArray array, String attr, SortingOrder order, int maxIteration) {
+        array = limitedQuick(array, 0, array.length() - 1, attr, maxIteration);
         if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
-            final List<T> result = new ArrayList<>(array);
-            Collections.reverse(result);
-            return result;
+            JSONArray toReturn = new JSONArray();
+            for (int i = array.length() - 1; i >= 0; i--) {
+                toReturn.put(array.get(i));
+            }
+            return toReturn;
         }
     }
 
-    public static <T extends Comparable<T>> List<T> limitedQuickSort(List<T> array, int maxIteration, SortingOrder order) {
-        array = limitedQuick(array, 0, array.size() - 1, maxIteration, order);
-        if (SortingOrder.ASCENDING.equals(order)) {
-            return array;
-        } else {
-            final List<T> result = new ArrayList<>(array);
-            Collections.reverse(result);
-            return result;
-        }
-    }
-
-    public static <T extends Comparable<T>> int partition(List<T> array, int start, int end, T pivot) {
+    public static int partition(JSONArray array, int start, int end, JSONObject pivot, String attr) {
         // Keep track of the current position in the array
         int current = start;
 
@@ -124,29 +95,29 @@ public class QuickSort implements Sortable {
             // If the current element is less than the pivot element,
             // swap it with the element at the current position and
             // move the current position to the right
-            if (array.get(i).compareTo(pivot) < 0) {
-                T temp = array.get(i);
-                array.set(i, array.get(current));
-                array.set(current, temp);
+            if (JSONComparator.compare((JSONObject) array.get(i), (JSONObject) pivot, attr) < 0) {
+                JSONObject temp = (JSONObject) array.get(i);
+                array.put(i, array.get(current));
+                array.put(current, temp);
                 current++;
             }
         }
 
         // Swap the pivot element with the element at the current position
-        array.set(end, array.get(current));
-        array.set(current, pivot);
+        array.put(end, array.get(current));
+        array.put(current, pivot);
 
         // Return the current position
         return current;
     }
 
     @Override
-    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
-        return quickSort(array, order);
+    public JSONArray run(JSONArray array, String attr, SortingOrder order) {
+        return quickSort(array, attr, order);
     }
 
     @Override
-    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
-        return limitedQuickSort(array, maxIterations, order);
+    public JSONArray run(JSONArray array, String attr, SortingOrder order, int maxIterations) {
+        return limitedQuickSort(array, attr, order, maxIterations);
     }
 }
