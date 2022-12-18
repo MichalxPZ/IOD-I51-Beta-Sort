@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class InsertionSort {
+public class InsertionSort implements Sortable {
 
     public static void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> sortedArray = insertionSort(array, SortingOrder.ASC);
+        List<Integer> sortedArray = insertionSort(array, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : sortedArray) {
@@ -25,7 +25,7 @@ public class InsertionSort {
         array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> limitedSortedArray = limitedInsertionSort(array, 4, SortingOrder.ASC);
+        List<Integer> limitedSortedArray = limitedInsertionSort(array, 4, SortingOrder.ASCENDING);
 
         // Print the limited sorted array
         for (Integer integer : limitedSortedArray) {
@@ -62,7 +62,7 @@ public class InsertionSort {
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
         // Return the sorted array
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -91,12 +91,22 @@ public class InsertionSort {
         }
 
         // Return the sorted array
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
             return result;
         }
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
+        return insertionSort(array, order);
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
+        return limitedInsertionSort(array, maxIterations, order);
     }
 }

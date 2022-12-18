@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class SelectionSort {
+public class SelectionSort implements Sortable {
 
     public static void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> sortedArray = selectionSort(array, SortingOrder.ASC);
+        List<Integer> sortedArray = selectionSort(array, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : sortedArray) {
@@ -25,7 +25,7 @@ public class SelectionSort {
         array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> limitedSortedArray = limitedSelectionSort(array, 3, SortingOrder.ASC);
+        List<Integer> limitedSortedArray = limitedSelectionSort(array, 3, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : limitedSortedArray) {
@@ -57,7 +57,7 @@ public class SelectionSort {
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
         // Return the sorted array
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -84,12 +84,22 @@ public class SelectionSort {
         }
 
         // Return the sorted array
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
             return result;
         }
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
+        return selectionSort(array, order);
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
+        return limitedSelectionSort(array, maxIterations, order);
     }
 }

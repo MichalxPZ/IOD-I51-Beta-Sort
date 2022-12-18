@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class QuickSort {
+public class QuickSort implements Sortable {
     public static void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> sortedArray = quickSort(array, SortingOrder.ASC);
+        List<Integer> sortedArray = quickSort(array, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : sortedArray) {
@@ -24,7 +24,7 @@ public class QuickSort {
         array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> limitedSortedArray = limitedQuickSort(array, 1, SortingOrder.ASC);
+        List<Integer> limitedSortedArray = limitedQuickSort(array, 1, SortingOrder.ASCENDING);
 
         // Print the limited sorted array
         for (Integer integer : limitedSortedArray) {
@@ -42,7 +42,7 @@ public class QuickSort {
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -95,7 +95,7 @@ public class QuickSort {
         limitedQuick(array, start, partition - 1, maxIterations, order);
         limitedQuick(array, partition + 1, end, maxIterations, order);
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -106,7 +106,7 @@ public class QuickSort {
 
     public static <T extends Comparable<T>> List<T> limitedQuickSort(List<T> array, int maxIteration, SortingOrder order) {
         array = limitedQuick(array, 0, array.size() - 1, maxIteration, order);
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -138,5 +138,15 @@ public class QuickSort {
 
         // Return the current position
         return current;
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
+        return quickSort(array, order);
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
+        return limitedQuickSort(array, maxIterations, order);
     }
 }

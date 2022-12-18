@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BubbleSort {
+public class BubbleSort implements Sortable {
 
     public static void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> sortedArray = bubbleSort(array, SortingOrder.ASC);
+        List<Integer> sortedArray = bubbleSort(array, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : sortedArray) {
@@ -25,7 +25,7 @@ public class BubbleSort {
         array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> limitedSortedArray = limitedBubbleSort(array, 0, SortingOrder.ASC);
+        List<Integer> limitedSortedArray = limitedBubbleSort(array, 0, SortingOrder.ASCENDING);
 
         // Print the limited sorted array
         for (Integer integer : limitedSortedArray) {
@@ -68,7 +68,7 @@ public class BubbleSort {
         System.out.println("Elapsed time: " + elapsedTime + " nanoseconds");
 
         // Return the sorted array
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -105,12 +105,22 @@ public class BubbleSort {
         }
 
         // Return the sorted array
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
             return result;
         }
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
+        return bubbleSort(array, order);
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
+        return limitedBubbleSort(array, maxIterations, order);
     }
 }

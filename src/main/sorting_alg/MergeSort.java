@@ -2,13 +2,13 @@ package pl.put.poznan.sorting_alg;
 
 import java.util.*;
 
-public class MergeSort {
+public class MergeSort implements Sortable {
     public static void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> sortedArray = mergeSortTime(array, SortingOrder.ASC);
+        List<Integer> sortedArray = mergeSortTime(array, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : sortedArray) {
@@ -21,7 +21,7 @@ public class MergeSort {
         array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> limitedSortedArray = limitedMergeSort(array, 2, SortingOrder.ASC);
+        List<Integer> limitedSortedArray = limitedMergeSort(array, 2, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : limitedSortedArray) {
@@ -41,7 +41,7 @@ public class MergeSort {
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return sortedArray;
         } else {
             final List<T> result = new ArrayList<>(sortedArray);
@@ -68,7 +68,7 @@ public class MergeSort {
         // Merge the sorted left and right halves into the original array
         merge(newLeft, newRight, array);
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -95,7 +95,7 @@ public class MergeSort {
         // Merge the sorted left and right halves into the original array
         merge(newLeft, newRight, array);
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -138,5 +138,15 @@ public class MergeSort {
             j++;
             k++;
         }
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
+        return mergeSortTime(array, order);
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
+        return limitedMergeSort(array, maxIterations, order);
     }
 }

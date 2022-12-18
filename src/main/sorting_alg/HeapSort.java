@@ -5,13 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class HeapSort {
+public class HeapSort implements Sortable {
     public static void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> sortedArray = heapSort(array, SortingOrder.ASC);
+        List<Integer> sortedArray = heapSort(array, SortingOrder.ASCENDING);
 
         // Print the sorted array
         for (Integer integer : sortedArray) {
@@ -24,7 +24,7 @@ public class HeapSort {
         array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
         // Sort the array
-        List<Integer> limitedSortedArray = limitedHeapSort(array, 3, SortingOrder.ASC);
+        List<Integer> limitedSortedArray = limitedHeapSort(array, 3, SortingOrder.ASCENDING);
 
         // Print the limited sorted array
         for (Integer integer : limitedSortedArray) {
@@ -57,7 +57,7 @@ public class HeapSort {
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -96,7 +96,7 @@ public class HeapSort {
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
-        if (SortingOrder.ASC.equals(order)) {
+        if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
             final List<T> result = new ArrayList<>(array);
@@ -131,5 +131,15 @@ public class HeapSort {
             array.set(largest, temp);
             heapify(array, size, largest);
         }
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, SortingOrder order) {
+        return heapSort(array, order);
+    }
+
+    @Override
+    public <T extends Comparable<T>> List<T> run(List<T> array, int maxIterations, SortingOrder order) {
+        return limitedHeapSort(array, maxIterations, order);
     }
 }
