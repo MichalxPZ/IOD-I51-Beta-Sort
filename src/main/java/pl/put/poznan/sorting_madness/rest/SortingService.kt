@@ -11,66 +11,26 @@ class SortingService {
     fun sortOneDimensionalDataSetString(
         requestModel: RequestModel<String>
     ): ResponseModel<String> {
-        return if (requestModel.algorithm == null) {
-            runAllAlgorithms(
-                numOfIterations = requestModel.iterationNumber,
-                property = requestModel.property,
-                data = requestModel.data,
-                order = requestModel.sortingOrder
-            )
-        } else {
-            runAlgorithm(
-                numOfIterations = requestModel.iterationNumber,
-                property = requestModel.property,
-                data = requestModel.data,
-                algorithm = requestModel.algorithm,
-                order = requestModel.sortingOrder
-            )
-        }
+        return callAlgorithms(requestModel)
     }
     fun sortOneDimensionalDataSetInt(
         requestModel: RequestModel<Int>
     ): ResponseModel<Int> {
-        return if (requestModel.algorithm == null) {
-            runAllAlgorithms(
-                numOfIterations = requestModel.iterationNumber,
-                property = requestModel.property,
-                data = requestModel.data,
-                order = requestModel.sortingOrder
-            )
-        } else {
-            runAlgorithm(
-                numOfIterations = requestModel.iterationNumber,
-                property = requestModel.property,
-                data = requestModel.data,
-                algorithm = requestModel.algorithm,
-                order = requestModel.sortingOrder
-            )
-        }
+        return callAlgorithms(requestModel)
     }
     fun sortOneDimensionalDataSetFloat(
         requestModel: RequestModel<Float>
     ): ResponseModel<Float> {
-        return if (requestModel.algorithm == null) {
-            runAllAlgorithms(
-                numOfIterations = requestModel.iterationNumber,
-                property = requestModel.property,
-                data = requestModel.data,
-                order = requestModel.sortingOrder
-            )
-        } else {
-            runAlgorithm(
-                numOfIterations = requestModel.iterationNumber,
-                property = requestModel.property,
-                data = requestModel.data,
-                algorithm = requestModel.algorithm,
-                order = requestModel.sortingOrder
-            )
-        }
+        return callAlgorithms(requestModel)
+
     }
     fun sortMultiDimensionalDataSet(
         requestModel: RequestModel<JsonObject>
     ) : ResponseModel<JsonObject> {
+        return callAlgorithms(requestModel)
+    }
+
+    private fun <T> callAlgorithms(requestModel: RequestModel<T>): ResponseModel<T> {
         return if (requestModel.algorithm == null) {
             runAllAlgorithms(
                 numOfIterations = requestModel.iterationNumber,
@@ -88,7 +48,6 @@ class SortingService {
             )
         }
     }
-
 
     private fun <T> runAlgorithm(
         algorithm: Algorithm,
@@ -97,7 +56,6 @@ class SortingService {
         property: String?,
         data: ArrayList<T>
     ): ResponseModel<T> {
-
         return ResponseModel(
             sortedData = data,
             property = property,
@@ -114,7 +72,6 @@ class SortingService {
         property: String?,
         data: ArrayList<T>
     ): ResponseModel<T> {
-
         return ResponseModel(
             sortedData = data,
             property = property,
