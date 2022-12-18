@@ -4,8 +4,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import org.springframework.stereotype.Service
 import pl.put.poznan.sorting_madness.logic.algorithms.*
-import pl.put.poznan.sorting_madness.rest.model.RequestModel
-import pl.put.poznan.sorting_madness.rest.model.ResponseModel
+import pl.put.poznan.sorting_madness.rest.model.*
+import java.util.*
 
 @Service
 class SortingService {
