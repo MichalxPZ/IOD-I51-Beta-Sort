@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import pl.put.poznan.sorting_madness.rest.model.RequestModel
 import pl.put.poznan.sorting_madness.rest.model.ResponseModel
+import springfox.documentation.spring.web.json.Json
+import java.util.*
 
 
 @RestController
@@ -20,7 +22,7 @@ class SortingController(
     @PostMapping("/api/sort/onedimension/string")
     private fun sortOneDimensionalDataSetString(
         @RequestBody requestModel: RequestModel<String>
-    ): ResponseModel<String> {
+    ): ArrayList<ResponseModel<String>> {
         logRequestDetails(requestModel)
         return sortingService.sortOneDimensionalDataSetString(requestModel)
     }
@@ -28,21 +30,21 @@ class SortingController(
     @PostMapping("/api/sort/onedimension/int")
     private fun sortOneDimensionalDataSetInt(
         @RequestBody requestModel: RequestModel<Int>
-    ): ResponseModel<Int> {
+    ): ArrayList<ResponseModel<Int>> {
         logRequestDetails(requestModel)
         return sortingService.sortOneDimensionalDataSetInt(requestModel)
     }
     @PostMapping("/api/sort/onedimension/float")
     private fun sortOneDimensionalDataSetFloat(
         @RequestBody requestModel: RequestModel<Float>
-    ): ResponseModel<Float> {
+    ): ArrayList<ResponseModel<Float>> {
         logRequestDetails(requestModel)
         return sortingService.sortOneDimensionalDataSetFloat(requestModel)
     }
     @PostMapping("/api/sort/multiDimension")
     private fun sortMultiDimensionalDataSet(
         @RequestBody requestModel: RequestModel<JsonObject>
-    ) : ResponseModel<JsonObject> {
+    ) : ArrayList<ResponseModel<JsonObject>> {
         logRequestDetails(requestModel)
         return sortingService.sortMultiDimensionalDataSet(requestModel)
     }

@@ -3,6 +3,8 @@ package pl.put.poznan.sorting_madness.rest.model
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
+import pl.put.poznan.sorting_madness.logic.algorithms.Algorithm
+import pl.put.poznan.sorting_madness.logic.algorithms.SortingOrder
 import java.util.*
 
 @Data
@@ -15,12 +17,3 @@ data class RequestModel<T>(
     val iterationNumber: Int?,
     val algorithm: Algorithm?
 )
-
-enum class SortingOrder {
-    ASCENDING, DESCENDING
-}
-
-enum class Algorithm {
-    //todo add algorithms when implemented
-    SORT
-}
