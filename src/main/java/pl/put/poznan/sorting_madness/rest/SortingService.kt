@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import pl.put.poznan.sorting_madness.logic.algorithms.*
 import pl.put.poznan.sorting_madness.rest.model.*
 import java.util.*
+import pl.put.poznan.sorting_madness.logic.algorithms.SortingOrder
 
 @Service
 class SortingService {
@@ -98,7 +99,7 @@ class SortingService {
                 sortingOrder = order ?: SortingOrder.ASCENDING,
                 iterationNumber = numOfIterations ?: 0,
                 algorithm = algorithm,
-                time = sortedDataResponse.time.toString() + "nanoseconds"
+                time = sortedDataResponse.time.get().toString() + " ns"
             )
         )
         return arrayList
@@ -181,7 +182,7 @@ class SortingService {
                         sortedArray.add(it)
                     }
                 }
-                time = this.time
+                time = this.time.get()
             }
             else if (listOfNumbers.isNotEmpty()) sortable.run(listOfNumbers, numOfIterations, order).run {
                 this.sortedData.forEach { value ->
@@ -189,7 +190,7 @@ class SortingService {
                         sortedArray.add(it)
                     }
                 }
-                time = this.time
+                time = this.time.get()
             }
         } else {
             if (listOfStrings.isNotEmpty()) sortable.run(listOfStrings, order).run {
@@ -198,7 +199,7 @@ class SortingService {
                         sortedArray.add(it)
                     }
                 }
-                time = this.time
+                time = this.time.get()
             }
             else if (listOfNumbers.isNotEmpty()) sortable.run(listOfNumbers, order).run {
                 this.sortedData.forEach { value ->
@@ -206,7 +207,7 @@ class SortingService {
                         sortedArray.add(it)
                     }
                 }
-                time = this.time
+                time = this.time.get()
             }
         }
         arrayList.add(
