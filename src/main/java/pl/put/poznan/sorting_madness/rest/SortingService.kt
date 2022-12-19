@@ -1,12 +1,13 @@
 package pl.put.poznan.sorting_madness.rest
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import org.springframework.stereotype.Service
 import pl.put.poznan.sorting_madness.logic.algorithms.*
-import pl.put.poznan.sorting_madness.rest.model.*
-import java.util.*
-import pl.put.poznan.sorting_madness.logic.algorithms.SortingOrder
+import pl.put.poznan.sorting_madness.logic.json_algorithms.*
+import pl.put.poznan.sorting_madness.rest.model.RequestJsonModel
+import pl.put.poznan.sorting_madness.rest.model.RequestModel
+import pl.put.poznan.sorting_madness.rest.model.ResponseModel
 
 @Service
 class SortingService {
@@ -31,8 +32,8 @@ class SortingService {
     }
 
     fun sortMultiDimensionalDataSet(
-        requestModel: RequestModel<JsonObject>
-    ): ArrayList<ResponseModel<JsonObject>> {
+        requestModel: RequestJsonModel
+    ): ArrayList<ResponseModel<JsonArray>> {
         return callAlgorithmsOnJsonObjects(requestModel)
     }
 
@@ -55,7 +56,7 @@ class SortingService {
         }
     }
 
-    private fun callAlgorithmsOnJsonObjects(requestModel: RequestModel<JsonObject>): ArrayList<ResponseModel<JsonObject>> {
+    private fun callAlgorithmsOnJsonObjects(requestModel: RequestJsonModel): ArrayList<ResponseModel<JsonArray>> {
         return if (requestModel.algorithm == null) {
             runAllAlgorithmsOnJsonObjects(
                 numOfIterations = requestModel.iterationNumber,
@@ -92,6 +93,8 @@ class SortingService {
 
         val sortedArray = ArrayList<T>()
         sortedDataResponse.sortedData.forEach { sortedArray.add(it) }
+
+        val time = if(sortedDataResponse.time.isPresent) sortedDataResponse.time.get().toString() else "0"
         arrayList.add(
             ResponseModel(
                 sortedData = sortedArray,
@@ -99,7 +102,7 @@ class SortingService {
                 sortingOrder = order ?: SortingOrder.ASCENDING,
                 iterationNumber = numOfIterations ?: 0,
                 algorithm = algorithm,
-                time = sortedDataResponse.time.get().toString() + " ns"
+                time = "$time ns"
             )
         )
         return arrayList
@@ -130,9 +133,9 @@ class SortingService {
         numOfIterations: Int?,
         order: SortingOrder?,
         property: String?,
-        data: ArrayList<JsonObject>
-    ): ArrayList<ResponseModel<JsonObject>> {
-        val arrayList = ArrayList<ResponseModel<JsonObject>>()
+        data: JsonArray
+    ): ArrayList<ResponseModel<JsonArray>> {
+        val arrayList = ArrayList<ResponseModel<JsonArray>>()
         for (algo in Algorithm.values()) {
             arrayList.add(
                 runAlgorithmOnJsonObject(
@@ -153,74 +156,33 @@ class SortingService {
         numOfIterations: Int?,
         order: SortingOrder?,
         property: String?,
-        data: ArrayList<JsonObject>
-    ): ArrayList<ResponseModel<JsonObject>> {
-        val sortable: Sortable = resolveAlgorithm(algorithm)
-        val arrayList = ArrayList<ResponseModel<JsonObject>>()
-        var listOfStrings = emptyList<String>()
-        var listOfNumbers = emptyList<Int>()
-        var time: Long? = 0
-        if (data.isNotEmpty()) {
-            val element = data[0].get(property)
-            when (getJsonElementType(element)) {
-                ValueType.NUMBER -> {
-                    listOfNumbers = data.map { it.asInt }
-                }
-                ValueType.STRING -> {
-                    listOfStrings = data.map { it.asString }
-                }
-                ValueType.BOOLEAN -> {}
-                ValueType.NULL -> {}
-            }
-
-        }
-        val sortedArray = ArrayList<JsonObject>()
-        if (numOfIterations != null && numOfIterations > 0) {
-            if (listOfStrings.isNotEmpty()) sortable.run(listOfStrings, numOfIterations, order).run {
-                this.sortedData.forEach { value ->
-                    data.find { it.get(property).asString == value }?.let {
-                        sortedArray.add(it)
-                    }
-                }
-                time = this.time.get()
-            }
-            else if (listOfNumbers.isNotEmpty()) sortable.run(listOfNumbers, numOfIterations, order).run {
-                this.sortedData.forEach { value ->
-                    data.find { it.get(property).asInt == value }?.let {
-                        sortedArray.add(it)
-                    }
-                }
-                time = this.time.get()
-            }
+        data: JsonArray
+    ): ArrayList<ResponseModel<JsonArray>> {
+        val sortable: JsonSortable = resolveJsonAlgorithm(algorithm)
+        val sortedDataResponse: SortedJsonDataResponse = if (numOfIterations != null && numOfIterations > 0) {
+            sortable.run(data, property, numOfIterations, order)
         } else {
-            if (listOfStrings.isNotEmpty()) sortable.run(listOfStrings, order).run {
-                this.sortedData.forEach { value ->
-                    data.find { it.get(property).asString == value }?.let {
-                        sortedArray.add(it)
-                    }
-                }
-                time = this.time.get()
-            }
-            else if (listOfNumbers.isNotEmpty()) sortable.run(listOfNumbers, order).run {
-                this.sortedData.forEach { value ->
-                    data.find { it.get(property).asInt == value }?.let {
-                        sortedArray.add(it)
-                    }
-                }
-                time = this.time.get()
-            }
+            sortable.run(data, property, order)
         }
-        arrayList.add(
-            ResponseModel(
-                sortedData = sortedArray,
-                property = property,
-                sortingOrder = order ?: SortingOrder.ASCENDING,
-                iterationNumber = numOfIterations ?: 0,
-                algorithm = algorithm,
-                time = time.toString() + "nanoseconds"
+
+        val sortedArray: ArrayList<JsonArray> = ArrayList<JsonArray>().apply {
+            add(sortedDataResponse.sortedData)
+        }
+
+        val responseArray: ArrayList<ResponseModel<JsonArray>> = java.util.ArrayList<ResponseModel<JsonArray>>().apply {
+            add(
+                ResponseModel(
+                    sortedData = sortedArray,
+                    property = property,
+                    sortingOrder = order ?: SortingOrder.ASCENDING,
+                    iterationNumber = numOfIterations ?: 0,
+                    algorithm = algorithm,
+                    time = sortedDataResponse.time.get().toString() + " ns"
+                )
             )
-        )
-        return arrayList
+        }
+
+        return responseArray
     }
 
     private fun resolveAlgorithm(algorithm: Algorithm): Sortable {
@@ -234,24 +196,14 @@ class SortingService {
         }
     }
 
-    private fun getJsonElementType(element: JsonElement): ValueType {
-        if (element.isJsonNull)
-            return ValueType.NULL;
-
-        if (element.isJsonPrimitive) {
-            if (element.asJsonPrimitive.isString)
-                return ValueType.STRING;
-            if (element.asJsonPrimitive.isNumber) {
-                return ValueType.NUMBER;
-            }
-            if (element.asJsonPrimitive.isBoolean)
-                return ValueType.BOOLEAN;
+    private fun resolveJsonAlgorithm(algorithm: Algorithm): JsonSortable {
+        return when (algorithm) {
+            Algorithm.BUBBLE_SORT -> JsonBubbleSort()
+            Algorithm.HEAP_SORT -> JsonHeapSort()
+            Algorithm.INSERTION_SORT -> JsonInsertionSort()
+            Algorithm.MERGE_SORT -> JsonMergeSort()
+            Algorithm.QUICK_SORT -> JsonQuickSort()
+            Algorithm.SELECTION_SORT -> JsonSelectionSort()
         }
-        return ValueType.NULL
     }
-
-}
-
-enum class ValueType {
-    NULL, NUMBER, STRING, BOOLEAN
 }

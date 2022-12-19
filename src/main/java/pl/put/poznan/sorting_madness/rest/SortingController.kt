@@ -1,14 +1,14 @@
 package pl.put.poznan.sorting_madness.rest
 
-import com.google.gson.JsonObject
+import com.google.gson.JsonArray
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import pl.put.poznan.sorting_madness.rest.model.RequestJsonModel
 import pl.put.poznan.sorting_madness.rest.model.RequestModel
 import pl.put.poznan.sorting_madness.rest.model.ResponseModel
-import springfox.documentation.spring.web.json.Json
 import java.util.*
 
 
@@ -34,6 +34,7 @@ class SortingController(
         logRequestDetails(requestModel)
         return sortingService.sortOneDimensionalDataSetInt(requestModel)
     }
+
     @PostMapping("/api/sort/onedimension/float")
     private fun sortOneDimensionalDataSetFloat(
         @RequestBody requestModel: RequestModel<Float>
@@ -41,15 +42,25 @@ class SortingController(
         logRequestDetails(requestModel)
         return sortingService.sortOneDimensionalDataSetFloat(requestModel)
     }
+
     @PostMapping("/api/sort/multiDimension")
     private fun sortMultiDimensionalDataSet(
-        @RequestBody requestModel: RequestModel<JsonObject>
-    ) : ArrayList<ResponseModel<JsonObject>> {
-        logRequestDetails(requestModel)
+        @RequestBody requestModel: RequestJsonModel
+    ): ArrayList<ResponseModel<JsonArray>> {
+        logJsonRequestDetails(requestModel)
         return sortingService.sortMultiDimensionalDataSet(requestModel)
     }
 
     private fun <T> logRequestDetails(requestModel: RequestModel<T>) {
+        logger.debug(
+            "\nSorting provided data set:" + "${requestModel.data}\n"
+                    + "with algorithm: " + requestModel.algorithm + "\n" +
+                    "num of iterations: " + requestModel.iterationNumber + "\n" +
+                    "sorting order: " + requestModel.sortingOrder + "\n"
+        )
+    }
+
+    private fun logJsonRequestDetails(requestModel: RequestJsonModel) {
         logger.debug(
             "\nSorting provided data set:" + "${requestModel.data}\n"
                     + "with algorithm: " + requestModel.algorithm + "\n" +
