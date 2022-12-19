@@ -18,7 +18,7 @@ public class BubbleSort implements Sortable {
             sorted = true;
 
             // Loop through the array
-            for (int i = 0; i < array.length(); i++) {
+            for (int i = 0; i < array.length() - 1; i++) {
                 // If two adjacent elements are not in order, swap them
                 // and set the `sorted` flag to `false`
                 if (SortingOrder.ASCENDING.equals(order) &&

@@ -10,7 +10,7 @@ public class MergeSort implements Sortable {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
 
-        JSONArray sortedArray = mergeSort(array, attr);
+        sortedArray = mergeSort(array, attr);
 
         // Record the ending time of the algorithm
         long endTime = System.nanoTime();
