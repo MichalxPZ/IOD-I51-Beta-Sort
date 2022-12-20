@@ -6,7 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class QuickSort implements Sortable {
-    public static void main(String[] args) {
+
+    public long executionTime = 0;
+
+    public void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
@@ -32,7 +35,7 @@ public class QuickSort implements Sortable {
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> quickSort(List<T> array, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> quickSort(List<T> array, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
 
@@ -41,23 +44,23 @@ public class QuickSort implements Sortable {
         long endTime = System.nanoTime();
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
-
+        executionTime = endTime - startTime;
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, (endTime - startTime));;
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array,executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, (endTime - startTime));;
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> quick(List<T> array, int start, int end) {
+    public <T extends Comparable<T>> SortedDataResponse<T> quick(List<T> array, int start, int end) {
 
         // If the array has length 1 or 0, it is already sorted
         if (end - start < 1) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array,null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array,executionTime);
             return sortedDataResponse;
         }
 
@@ -72,12 +75,12 @@ public class QuickSort implements Sortable {
         quick(array, partition + 1, end);
 
 
-        SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array,null);
+        SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array,executionTime);
         return sortedDataResponse;
 
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> limitedQuick(List<T> array, int start, int end, int maxIterations, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> limitedQuick(List<T> array, int start, int end, int maxIterations, SortingOrder order) {
         // If the array has length 1 or 0, it is already sorted
         if (end - start < 1) {
             SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array,null);
@@ -104,25 +107,29 @@ public class QuickSort implements Sortable {
         limitedQuick(array, partition + 1, end, maxIterations, order);
 
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> limitedQuickSort(List<T> array, int maxIteration, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> limitedQuickSort(List<T> array, int maxIteration, SortingOrder order) {
+        long startTime = System.nanoTime();
         array = limitedQuick(array, 0, array.size() - 1, maxIteration, order).getSortedData();
+        long endTime = System.nanoTime();
+        executionTime = endTime - startTime;
+
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }

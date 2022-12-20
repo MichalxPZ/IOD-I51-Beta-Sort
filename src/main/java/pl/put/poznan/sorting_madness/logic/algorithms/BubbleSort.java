@@ -7,7 +7,9 @@ import java.util.List;
 
 public class BubbleSort implements Sortable {
 
-    public static void main(String[] args) {
+    public long executionTime = 0;
+
+    public void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
@@ -33,7 +35,7 @@ public class BubbleSort implements Sortable {
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> bubbleSort(List<T> array, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> bubbleSort(List<T> array, SortingOrder order) {
         // Measure the start time
         long startTime = System.nanoTime();
 
@@ -66,7 +68,7 @@ public class BubbleSort implements Sortable {
 
         // Print the elapsed time
         System.out.println("Elapsed time: " + elapsedTime + " nanoseconds");
-
+        executionTime = elapsedTime;
         // Return the sorted array
         if (SortingOrder.ASCENDING.equals(order)) {
             SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, elapsedTime);
@@ -79,12 +81,14 @@ public class BubbleSort implements Sortable {
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> limitedBubbleSort(List<T> array, int maxIterations, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> limitedBubbleSort(List<T> array, int maxIterations, SortingOrder order) {
         // Keep track of whether the array is sorted
+
         boolean sorted = false;
         // Keep track of the number of iterations
         int iterationCount = 0;
 
+        long startTime = System.nanoTime();
         // Repeat until the array is sorted or the maximum number of iterations has been reached
         while (!sorted && iterationCount < maxIterations) {
             // Assume the array is sorted
@@ -105,15 +109,17 @@ public class BubbleSort implements Sortable {
             // Increment the iteration count
             iterationCount++;
         }
+        long endTime = System.nanoTime();
+        executionTime = endTime - startTime;
 
         // Return the sorted array
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, null);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }

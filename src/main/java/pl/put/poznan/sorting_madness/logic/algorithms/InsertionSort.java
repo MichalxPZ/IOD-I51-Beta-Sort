@@ -7,7 +7,9 @@ import java.util.List;
 
 public class InsertionSort implements Sortable {
 
-    public static void main(String[] args) {
+    public long executionTime = 0;
+
+    public void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
@@ -33,7 +35,7 @@ public class InsertionSort implements Sortable {
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> insertionSort(List<T> array, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> insertionSort(List<T> array, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
 
@@ -60,20 +62,21 @@ public class InsertionSort implements Sortable {
 
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
-
+        executionTime = endTime - startTime;
         // Return the sorted array
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, endTime-startTime);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, endTime-startTime);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> limitedInsertionSort(List<T> array, int maxIterations, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> limitedInsertionSort(List<T> array, int maxIterations, SortingOrder order) {
+        long startTime = System.nanoTime();
         // Loop through the array
         for (int i = 1; i < array.size() && i <= maxIterations; i++) {
             // Save the current element
@@ -92,14 +95,17 @@ public class InsertionSort implements Sortable {
             array.set(j + 1, current);
         }
 
+        long endTime = System.nanoTime();
+        executionTime = endTime - startTime;
+
         // Return the sorted array
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, null);;
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);;
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, null);;
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);;
             return sortedDataResponse;
         }
     }

@@ -6,7 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class HeapSort implements Sortable {
-    public static void main(String[] args) {
+
+    public long executionTime = 0;
+
+    public void main(String[] args) {
         // The array to sort
         List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
 
@@ -32,7 +35,7 @@ public class HeapSort implements Sortable {
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> heapSort(List<T> array, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> heapSort(List<T> array, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
 
@@ -56,19 +59,20 @@ public class HeapSort implements Sortable {
         long endTime = System.nanoTime();
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
+        executionTime = endTime - startTime;
 
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, endTime-startTime);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, endTime-startTime);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }
 
-    public static <T extends Comparable<T>> SortedDataResponse<T> limitedHeapSort(List<T> array, int maxIterations, SortingOrder order) {
+    public <T extends Comparable<T>> SortedDataResponse<T> limitedHeapSort(List<T> array, int maxIterations, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
 
@@ -98,18 +102,20 @@ public class HeapSort implements Sortable {
         // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
 
+        executionTime = endTime - startTime;
+
         if (SortingOrder.ASCENDING.equals(order)) {
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, endTime-startTime);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(array, executionTime);
             return sortedDataResponse;
         } else {
             final List<T> result = new ArrayList<>(array);
             Collections.reverse(result);
-            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, endTime-startTime);
+            SortedDataResponse<T> sortedDataResponse = new SortedDataResponse<T>(result, executionTime);
             return sortedDataResponse;
         }
     }
 
-    public static <T extends Comparable<T>> void heapify(List<T> array, int size, int i) {
+    public <T extends Comparable<T>> void heapify(List<T> array, int size, int i) {
         // Calculate the indices of the left and right children of the current node
         int left = 2 * i + 1;
         int right = 2 * i + 2;

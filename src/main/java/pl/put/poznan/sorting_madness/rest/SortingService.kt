@@ -93,8 +93,7 @@ class SortingService {
 
         val sortedArray = ArrayList<T>()
         sortedDataResponse.sortedData.forEach { sortedArray.add(it) }
-
-        val time = if(sortedDataResponse.time.isPresent) sortedDataResponse.time.get().toString() else "0"
+        
         arrayList.add(
             ResponseModel(
                 sortedData = sortedArray,
@@ -102,7 +101,7 @@ class SortingService {
                 sortingOrder = order ?: SortingOrder.ASCENDING,
                 iterationNumber = numOfIterations ?: 0,
                 algorithm = algorithm,
-                time = "$time ns"
+                time = sortedDataResponse.time.get().toString() + " ns"
             )
         )
         return arrayList
