@@ -9,17 +9,14 @@ public class JsonInsertionSort implements JsonSortable {
     public long executionTime = 0;
 
     public JsonArray insertionSort(JsonArray array, String attr, SortingOrder order) {
-        // Record the starting time of the algorithm
+
         long startTime = System.nanoTime();
 
-        // Loop through the array
         for (int i = 1; i < array.size(); i++) {
             // Save the current element
             JsonObject current = (JsonObject) array.get(i);
 
-            // Shift all elements that are greater than the current element
-            // to the right, until we find an element that is less than or
-            // equal to the current element
+
             int j = i - 1;
             while (j >= 0 &&
                     JSONComparator.compare((JsonObject) array.get(j), current, attr) > 0) {
@@ -27,14 +24,11 @@ public class JsonInsertionSort implements JsonSortable {
                 j--;
             }
 
-            // Insert the current element in the correct position
             array.set(j + 1, current);
         }
 
-        // Record the ending time of the algorithm
         long endTime = System.nanoTime();
 
-        // Print the execution time of the algorithm
         System.out.println("Total execution time: " + (endTime - startTime) + " nanoseconds");
         executionTime = endTime - startTime;
 
@@ -52,14 +46,11 @@ public class JsonInsertionSort implements JsonSortable {
 
     public JsonArray limitedInsertionSort(JsonArray array, String attr, SortingOrder order, int maxIterations) {
         long startTime = System.nanoTime();
-        // Loop through the array
+
         for (int i = 1; i < array.size() && i <= maxIterations; i++) {
-            // Save the current element
+
             JsonObject current = (JsonObject) array.get(i);
 
-            // Shift all elements that are greater than the current element
-            // to the right, until we find an element that is less than or
-            // equal to the current element
             int j = i - 1;
             while (j >= 0 &&
                     JSONComparator.compare((JsonObject) array.get(j), current, attr) > 0) {
@@ -67,13 +58,11 @@ public class JsonInsertionSort implements JsonSortable {
                 j--;
             }
 
-            // Insert the current element in the correct position
             array.set(j + 1, current);
         }
         long endTime = System.nanoTime();
         executionTime = endTime - startTime;
 
-        // Return the sorted array
         if (SortingOrder.ASCENDING.equals(order)) {
             return array;
         } else {
