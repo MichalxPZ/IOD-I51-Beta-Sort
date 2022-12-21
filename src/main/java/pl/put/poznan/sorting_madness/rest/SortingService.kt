@@ -1,7 +1,8 @@
 package pl.put.poznan.sorting_madness.rest
 
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import pl.put.poznan.sorting_madness.logic.algorithms.*
 import pl.put.poznan.sorting_madness.logic.json_algorithms.*
@@ -11,6 +12,8 @@ import pl.put.poznan.sorting_madness.rest.model.ResponseModel
 
 @Service
 class SortingService {
+
+    private val logger: Logger = LoggerFactory.getLogger(SortingService::class.java)
 
     fun sortOneDimensionalDataSetString(
         requestModel: RequestModel<String>
@@ -39,39 +42,76 @@ class SortingService {
 
     private fun <T : Comparable<T>> callAlgorithms(requestModel: RequestModel<T>): ArrayList<ResponseModel<T>> {
         return if (requestModel.algorithm == null) {
+            logStartOfAlgorithmExecution<T>(isJson = false, allAlgorithms = true, requestModel = requestModel)
             runAllAlgorithms(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 order = requestModel.sortingOrder
-            )
+            ).apply {
+                logFinishOfAlgorithmExecution(
+                    isJson = false,
+                    allAlgorithms = true,
+                    responseModel = if (this.isNotEmpty()) this[0] else null
+                )
+            }
         } else {
+            logStartOfAlgorithmExecution<T>(isJson = false, allAlgorithms = false, requestModel = requestModel)
             runAlgorithm(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 algorithm = requestModel.algorithm,
                 order = requestModel.sortingOrder
-            )
+            ).apply {
+                logFinishOfAlgorithmExecution(
+                    isJson = false,
+                    allAlgorithms = false,
+                    responseModel = if (this.isNotEmpty()) this[0] else null
+                )
+            }
         }
     }
 
     private fun callAlgorithmsOnJsonObjects(requestModel: RequestJsonModel): ArrayList<ResponseModel<JsonArray>> {
         return if (requestModel.algorithm == null) {
+            logStartOfAlgorithmExecution<JsonArray>(
+                isJson = true,
+                allAlgorithms = true,
+                requestJsonModel = requestModel
+            )
             runAllAlgorithmsOnJsonObjects(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 order = requestModel.sortingOrder
-            )
+            ).apply {
+                logFinishOfAlgorithmExecution(
+                    isJson = true,
+                    allAlgorithms = true,
+                    responseModel = if (this.isNotEmpty()) this[0] else null
+                )
+            }
+
         } else {
+            logStartOfAlgorithmExecution<JsonArray>(
+                isJson = true,
+                allAlgorithms = false,
+                requestJsonModel = requestModel
+            )
             runAlgorithmOnJsonObject(
                 numOfIterations = requestModel.iterationNumber,
                 property = requestModel.property,
                 data = requestModel.data,
                 algorithm = requestModel.algorithm,
                 order = requestModel.sortingOrder
-            )
+            ).apply {
+                logFinishOfAlgorithmExecution(
+                    isJson = true,
+                    allAlgorithms = false,
+                    responseModel = if (this.isNotEmpty()) this[0] else null
+                )
+            }
         }
     }
 
@@ -84,16 +124,15 @@ class SortingService {
     ): ArrayList<ResponseModel<T>> {
         val sortable: Sortable = resolveAlgorithm(algorithm)
         val arrayList = ArrayList<ResponseModel<T>>()
-        val sortedDataResponse: SortedDataResponse<T>
-        if (numOfIterations != null && numOfIterations > 0) {
-            sortedDataResponse = sortable.run(data, numOfIterations, order)
+        val sortedDataResponse: SortedDataResponse<T> = if (numOfIterations != null && numOfIterations > 0) {
+            sortable.run(data, numOfIterations, order)
         } else {
-            sortedDataResponse = sortable.run(data, order)
+            sortable.run(data, order)
         }
 
         val sortedArray = ArrayList<T>()
         sortedDataResponse.sortedData.forEach { sortedArray.add(it) }
-        
+
         arrayList.add(
             ResponseModel(
                 sortedData = sortedArray,
@@ -203,6 +242,50 @@ class SortingService {
             Algorithm.MERGE_SORT -> JsonMergeSort()
             Algorithm.QUICK_SORT -> JsonQuickSort()
             Algorithm.SELECTION_SORT -> JsonSelectionSort()
+        }
+    }
+
+    private fun <T> logStartOfAlgorithmExecution(
+        isJson: Boolean,
+        allAlgorithms: Boolean,
+        requestJsonModel: RequestJsonModel? = null,
+        requestModel: RequestModel<T>? = null
+    ) {
+        if (isJson) {
+            if (allAlgorithms) logger.info("Start sorting json data: ${requestJsonModel?.data} with all algorithms")
+            else logger.info("Start sorting json data: ${requestJsonModel?.data} using algorithm: ${requestJsonModel?.algorithm?.name}")
+        } else {
+            if (allAlgorithms) logger.info("Start sorting data: ${requestJsonModel?.data} with all algorithms")
+            else logger.info("Start sorting data: ${requestModel?.data} using algorithm: ${requestModel?.algorithm?.name}")
+        }
+    }
+
+    private fun <T> logFinishOfAlgorithmExecution(
+        isJson: Boolean,
+        allAlgorithms: Boolean,
+        responseModel: ResponseModel<T>? = null,
+    ) {
+        if (isJson) {
+            if (allAlgorithms) {
+                logger.info("Finish sorting json data: ${responseModel?.sortedData} with all algorithms and with order ${responseModel?.sortingOrder} and ${responseModel?.iterationNumber} iterations")
+                responseModel?.sortedData?.forEach { _ ->
+                    logger.info("Results using algorithm ${responseModel.algorithm?.name}: ${responseModel.sortedData}, time: ${responseModel.time} ns")
+                }
+            } else {
+                logger.info("Finish sorting json data: ${responseModel?.sortedData} using algorithm: ${responseModel?.algorithm?.name} with order ${responseModel?.sortingOrder} and ${responseModel?.iterationNumber} iterations")
+                logger.info("Results using algorithm ${responseModel?.algorithm?.name}: ${responseModel?.sortedData}, time: ${responseModel?.time} ns")
+
+            }
+        } else {
+            if (allAlgorithms) {
+                logger.info("Finish sorting data: ${responseModel?.sortedData} with all algorithms and with order ${responseModel?.sortingOrder} and ${responseModel?.iterationNumber} iterations")
+                responseModel?.sortedData?.forEach { _ ->
+                    logger.info("Results using algorithm ${responseModel.algorithm?.name}: ${responseModel.sortedData}, time: ${responseModel.time} ns")
+                }
+            } else {
+                logger.info("Finish sorting data: ${responseModel?.sortedData} using algorithm: ${responseModel?.algorithm?.name} with order ${responseModel?.sortingOrder} and ${responseModel?.iterationNumber} iterations")
+                logger.info("Results using algorithm ${responseModel?.algorithm?.name}: ${responseModel?.sortedData}, time: ${responseModel?.time} ns")
+            }
         }
     }
 }
