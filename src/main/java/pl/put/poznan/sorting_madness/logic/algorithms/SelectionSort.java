@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * This class contains methods to perform the Sort by Selection algorithm on data of primitive type
+ */
 public class SelectionSort implements Sortable {
 
+    /**
+     * variable indicating the execution time of the algorithm in [ns]
+     */
     public long executionTime = 0;
 
     public void main(String[] args) {
@@ -28,6 +33,13 @@ public class SelectionSort implements Sortable {
         }
     }
 
+    /**
+     * This method performs Sort by Selection algorithm on data of primitive types
+     * @param array array of data of primitive type such as String, Int or Float
+     * @param order soring order - ascending or descending
+     * @param <T> type od data eg String
+     * @return object of SortedDataResponse containing sorted data and algorithm execution time
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> selectionSort(List<T> array, SortingOrder order) {
 
         long startTime = System.nanoTime();
@@ -62,6 +74,14 @@ public class SelectionSort implements Sortable {
         }
     }
 
+    /**
+     * This method performs Sort by Selection algorithm on data of primitive types with indicated maximum number of iterations
+     * @param array array of data of primitive type such as String, Int or Float
+     * @param maxIterations maximum number of iterations of algorithm execution
+     * @param order soring order - ascending or descending
+     * @param <T> type od data eg String
+     * @return object of SortedDataResponse containing sorted data and algorithm execution time
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> limitedSelectionSort(List<T> array, int maxIterations, SortingOrder order) {
         long startTime = System.nanoTime();
 
@@ -93,11 +113,28 @@ public class SelectionSort implements Sortable {
         }
     }
 
+    /**
+     * M Method overridden by the Sortable interface that performs run operation
+     * of Sort by Selection algorithm on data of primitive types
+     * @param array array of data of primitive type such as String, Int or Float
+     * @param order soring order - ascending or descending
+     * @param <T> type od data eg String
+     * @return object of SortedDataResponse containing sorted data and algorithm execution time
+     */
     @Override
     public <T extends Comparable<T>> SortedDataResponse<T> run(List<T> array, SortingOrder order) {
         return selectionSort(array, order);
     }
 
+    /**
+     * Method overridden by the Sortable interface that performs run operation
+     * of Sort by Selection algorithm on data of primitive types with indicated maximum number of iterations
+     * @param array array of data of primitive type such as String, Int or Float
+     * @param maxIterations maximum number of iterations of algorithm execution
+     * @param order soring order - ascending or descending
+     * @param <T> type od data eg String
+     * @return object of SortedDataResponse containing sorted data and algorithm execution time
+     */
     @Override
     public <T extends Comparable<T>> SortedDataResponse<T> run(List<T> array, int maxIterations, SortingOrder order) {
         return limitedSelectionSort(array, maxIterations, order);
