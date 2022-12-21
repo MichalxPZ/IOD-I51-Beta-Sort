@@ -3,12 +3,30 @@ package pl.put.poznan.sorting_madness.logic.json_algorithms;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import pl.put.poznan.sorting_madness.logic.algorithms.Sortable;
+import pl.put.poznan.sorting_madness.logic.algorithms.SortedDataResponse;
 import pl.put.poznan.sorting_madness.logic.algorithms.SortingOrder;
 
+/**
+ * The MergeSort class implements the {@link JsonSortable} interface and provides methods for
+ * sorting a list of elements using the merge sort algorithm.
+ * The merge sort algorithm works by dividing the input list into two halves,
+ * sorting each half, and then merging the sorted halves back together.
+ * The divide and conquer approach used by merge sort allows it to have a time
+ * complexity of O(n * log(n)), making it more efficient than other sorting algorithms for large lists.
+ * The class also provides a method for sorting the list with a maximum number of iterations,
+ * allowing for the sorting process to be limited.
+ */
 public class JsonMergeSort implements JsonSortable {
 
     public long executionTime = 0;
 
+    /**
+     Sorts the given list using the merge sort algorithm with a specified sorting order.
+     @param array the list to be sorted
+     @param order the desired sorting order (ascending or descending)
+     @return a {@link SortedJsonDataResponse} object containing the sorted list and the execution time of the sorting process
+     */
     public JsonArray mergeSortTime(JsonArray array, String attr, SortingOrder order) {
         // Record the starting time of the algorithm
         long startTime = System.nanoTime();
@@ -55,6 +73,13 @@ public class JsonMergeSort implements JsonSortable {
         return array;
     }
 
+    /**
+     * Sorts the given list using the merge sort algorithm with a specified maximum number of iterations and sorting order.
+     * @param array the list to be sorted
+     * @param maxIteration the maximum number of iterations to be performed during the sorting process
+     * @param order the desired sorting order (ascending or descending)
+     * @return a {@link SortedJsonDataResponse} object containing the sorted list and the execution time of the sorting process
+     */
     public JsonArray limitedMergeSort(JsonArray array, String attr, SortingOrder order, int maxIteration) {
         if (array.size() <= 1 || maxIteration == 0) {
             return array;
@@ -120,12 +145,18 @@ public class JsonMergeSort implements JsonSortable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SortedJsonDataResponse run(JsonArray array, String attr, SortingOrder order) {
         JsonArray sortedData = mergeSortTime(array, attr, order);
         return new SortedJsonDataResponse(sortedData, executionTime);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SortedJsonDataResponse run(JsonArray array, String attr, int maxIterations, SortingOrder order) {
         JsonArray sortedData = limitedMergeSort(array, attr, order, maxIterations);

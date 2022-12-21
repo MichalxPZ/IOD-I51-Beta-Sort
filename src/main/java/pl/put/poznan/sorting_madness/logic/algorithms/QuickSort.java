@@ -5,28 +5,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The QuickSort class implements the {@link Sortable} interface and provides methods for
+ * sorting a list of elements using the merge sort algorithm.
+ */
 public class QuickSort implements Sortable {
 
     public long executionTime = 0;
 
-    public void main(String[] args) {
-        List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        List<Integer> sortedArray = quickSort(array, SortingOrder.ASCENDING).getSortedData();
-
-        for (Integer integer : sortedArray) {
-            System.out.print(integer + " ");
-        }
-
-        array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        List<Integer> limitedSortedArray = limitedQuickSort(array, 1, SortingOrder.ASCENDING).getSortedData();
-
-        for (Integer integer : limitedSortedArray) {
-            System.out.print(integer + " ");
-        }
-    }
-
+    /**
+     * Sorts the given array in ascending or descending order using the QuickSort algorithm.
+     * @param array the list to be sorted
+     * @param order the desired order for the list (ascending or descending)
+     * @return a {@link SortedDataResponse} object containing the sorted list and the execution time of the sorting algorithm
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> quickSort(List<T> array, SortingOrder order) {
 
         long startTime = System.nanoTime();
@@ -48,6 +40,13 @@ public class QuickSort implements Sortable {
         }
     }
 
+    /**
+     * Recursive helper method for the QuickSort algorithm. Sorts the given list between the start and end indices.
+     * @param array the list to be sorted
+     * @param start the starting index for the sorting
+     * @param end the ending index for the sorting
+     * @return a {@link SortedDataResponse} object containing the sorted list and the execution time of the sorting algorithm
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> quick(List<T> array, int start, int end) {
 
         if (end - start < 1) {
@@ -68,6 +67,13 @@ public class QuickSort implements Sortable {
 
     }
 
+    /**
+     * Sorts the given array in ascending or descending order using the QuickSort algorithm.
+     * @param array the list to be sorted
+     * @param maxIterations the maximum number of iterations to be performed during the sorting process
+     * @param order the desired order for the list (ascending or descending)
+     * @return a {@link SortedDataResponse} object containing the sorted list and the execution time of the sorting algorithm
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> limitedQuick(List<T> array, int start, int end, int maxIterations, SortingOrder order) {
 
         if (end - start < 1) {
@@ -137,11 +143,17 @@ public class QuickSort implements Sortable {
         return current;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Comparable<T>> SortedDataResponse<T> run(List<T> array, SortingOrder order) {
         return quickSort(array, order);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Comparable<T>> SortedDataResponse<T> run(List<T> array, int maxIterations, SortingOrder order) {
         return limitedQuickSort(array, maxIterations, order);

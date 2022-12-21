@@ -5,29 +5,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A class that implements the {@link Sortable} interface and provides heap sort algorithm.
+ * The heap sort algorithm creates a binary heap from the given list of elements, and then removes the largest element from the heap
+ * and places it at the end of the list until the list is sorted.
+ */
 public class HeapSort implements Sortable {
 
+    /**
+     * The execution time of the heap sort algorithm, in nanoseconds.
+     */
     public long executionTime = 0;
 
-    public void main(String[] args) {
-
-        List<Integer> array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        List<Integer> sortedArray = heapSort(array, SortingOrder.ASCENDING).getSortedData();
-
-        for (Integer integer : sortedArray) {
-            System.out.print(integer + " ");
-        }
-
-        array = new ArrayList<>(Arrays.asList(5, 9, 3, 1, 2, 8, 4, 7, 6));
-
-        List<Integer> limitedSortedArray = limitedHeapSort(array, 3, SortingOrder.ASCENDING).getSortedData();
-
-        for (Integer integer : limitedSortedArray) {
-            System.out.print(integer + " ");
-        }
-    }
-
+    /**
+     * Sorts the given list of elements in ascending or descending order, using the heap sort algorithm.
+     *
+     * @param array the list of elements to be sorted
+     * @param order the desired order for the sorted list (ascending or descending)
+     * @return a {@link SortedDataResponse} object containing the sorted list of elements and the execution time of the algorithm
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> heapSort(List<T> array, SortingOrder order) {
 
         long startTime = System.nanoTime();
@@ -60,6 +56,15 @@ public class HeapSort implements Sortable {
         }
     }
 
+    /**
+     * Sorts the given list of elements in ascending or descending order, using the heap sort algorithm.
+     * The algorithm will only iterate through the list a maximum number of times, as specified by the `maxIterations` parameter.
+     *
+     * @param array the list of elements to be sorted
+     * @param maxIterations the maximum number of iterations the algorithm should perform
+     * @param order the desired order for the sorted list (ascending or descending)
+     * @return a {@link SortedDataResponse} object containing the sorted list of elements and the execution time of the algorithm
+     */
     public <T extends Comparable<T>> SortedDataResponse<T> limitedHeapSort(List<T> array, int maxIterations, SortingOrder order) {
 
         long startTime = System.nanoTime();
@@ -97,6 +102,13 @@ public class HeapSort implements Sortable {
         }
     }
 
+    /**
+     * Helper method for the heap sort algorithm. Rebuilds the binary heap with the given root node.
+     *
+     * @param array the list of elements being sorted
+     * @param size the size of the heap
+     * @param i the index of the root node
+     */
     public <T extends Comparable<T>> void heapify(List<T> array, int size, int i) {
 
         int left = 2 * i + 1;
@@ -120,11 +132,17 @@ public class HeapSort implements Sortable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Comparable<T>> SortedDataResponse<T> run(List<T> array, SortingOrder order) {
         return heapSort(array, order);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T extends Comparable<T>> SortedDataResponse<T> run(List<T> array, int maxIterations, SortingOrder order) {
         return limitedHeapSort(array, maxIterations, order);

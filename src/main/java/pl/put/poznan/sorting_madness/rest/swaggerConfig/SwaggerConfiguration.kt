@@ -14,9 +14,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 import java.lang.reflect.Type
 
 
+/**
+ * Swagger configuration for Sorting Madness REST API.
+ */
 @Configuration
 @EnableSwagger2
 open class SwaggerConfiguration{
+    /**
+     * Creates a new Docket bean for Swagger.
+     * @return the new Docket bean
+     */
     @Bean
     open fun api(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
@@ -27,6 +34,10 @@ open class SwaggerConfiguration{
             .apiInfo(getApiInfo())
     }
 
+    /**
+     * Creates a new ApiInfo object for Swagger.
+     * @return the new ApiInfo object
+     */
     private fun getApiInfo(): ApiInfo {
         return ApiInfoBuilder()
             .version("1.0.0")

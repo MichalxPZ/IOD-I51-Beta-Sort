@@ -10,23 +10,45 @@ import pl.put.poznan.sorting_madness.rest.model.RequestJsonModel
 import pl.put.poznan.sorting_madness.rest.model.RequestModel
 import pl.put.poznan.sorting_madness.rest.model.ResponseModel
 
+/**
+ * The SortingService class is responsible for sorting data of various types and dimensions, using a variety of algorithms.
+ * It receives request models, either RequestModel or RequestJsonModel, containing the data to be sorted, along with
+ * optional parameters such as the sorting algorithm to be used, the number of iterations to perform, the sorting order,
+ * and the property by which to sort. It then sorts the data using the specified algorithm or all available algorithms,
+ * and returns a list of ResponseModel objects containing the sorted data and other relevant information.
+ */
 @Service
 class SortingService {
 
     private val logger: Logger = LoggerFactory.getLogger(SortingService::class.java)
 
+    /**
+     * Sorts a one-dimensional data set of strings using the specified algorithm or all available algorithms.
+     * @param requestModel a RequestModel object containing the data to be sorted and optional sorting parameters
+     * @return a list of ResponseModel objects containing the sorted data and other relevant information
+     */
     fun sortOneDimensionalDataSetString(
         requestModel: RequestModel<String>
     ): ArrayList<ResponseModel<String>> {
         return callAlgorithms(requestModel)
     }
 
+    /**
+     * Sorts a one-dimensional data set of integers using the specified algorithm or all available algorithms.
+     * @param requestModel a RequestModel object containing the data to be sorted and optional sorting parameters
+     * @return a list of ResponseModel objects containing the sorted data and other relevant information
+     */
     fun sortOneDimensionalDataSetInt(
         requestModel: RequestModel<Int>
     ): ArrayList<ResponseModel<Int>> {
         return callAlgorithms(requestModel)
     }
 
+    /**
+     * Sorts a one-dimensional data set of floats using the specified algorithm or all available algorithms.
+     * @param requestModel a RequestModel object containing the data to be sorted and optional sorting parameters
+     * @return a list of ResponseModel objects containing the sorted data and other relevant information
+     */
     fun sortOneDimensionalDataSetFloat(
         requestModel: RequestModel<Float>
     ): ArrayList<ResponseModel<Float>> {
@@ -34,11 +56,18 @@ class SortingService {
 
     }
 
+    /**
+     * the provided multi-dimensional data set according to the specified parameters.
+     * @param requestModel object containing the data set to be sorted, the sorting algorithm to be used,
+     * the maximum number of iterations to perform, the property to sort by, and the sorting order
+     * @return a list of response objects containing the sorted data set and the time taken to sort it
+     */
     fun sortMultiDimensionalDataSet(
         requestModel: RequestJsonModel
     ): ArrayList<ResponseModel<JsonArray>> {
         return callAlgorithmsOnJsonObjects(requestModel)
     }
+
 
     private fun <T : Comparable<T>> callAlgorithms(requestModel: RequestModel<T>): ArrayList<ResponseModel<T>> {
         return if (requestModel.algorithm == null) {
