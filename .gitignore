@@ -3,3 +3,4 @@ target/*
 *.log
 /target/classes/
 /target/maven-status/
+!/target/site/*
