@@ -3,7 +3,8 @@ package pl.put.poznan.sorting_madness.rest.model
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
-import java.time.LocalDateTime
+import pl.put.poznan.sorting_madness.logic.algorithms.Algorithm
+import pl.put.poznan.sorting_madness.logic.algorithms.SortingOrder
 import java.util.*
 
 @Data
