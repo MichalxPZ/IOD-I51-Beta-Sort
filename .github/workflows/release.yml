@@ -45,6 +45,9 @@ jobs:
       - name: Execute maven build
         run:  mvn -B package --file pom.xml
 
+      # Javadoc
+      - run: mvn javadoc:javadoc
+
       # debug
       - run: git version
       - run: git branch

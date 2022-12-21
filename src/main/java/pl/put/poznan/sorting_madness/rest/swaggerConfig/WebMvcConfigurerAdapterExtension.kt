@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.view.InternalResourceViewResolver
 
 
-
 @Configuration
 @EnableWebMvc
 open class WebMvcConfigurerAdapterExtension : WebMvcConfigurer {
