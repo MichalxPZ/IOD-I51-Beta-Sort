@@ -1,24 +1,21 @@
 package pl.put.poznan.sorting_madness.logic.json_algorithms;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import pl.put.poznan.sorting_madness.logic.algorithms.SortingOrder;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class JsonQuickSortTest {
 
-    JsonArray jsonArray, sortedJsonArray;
+    JsonArray jsonArray, sortedAscJsonArray, sortedDescJsonArray;
 
     JsonQuickSort jsonQuickSort;
 
@@ -44,8 +41,11 @@ class JsonQuickSortTest {
 
         jsonArray = new JsonArray();
         getArrayWithValues();
-        sortedJsonArray = new JsonArray();
-        getSortedArrayByName();
+        sortedAscJsonArray = new JsonArray();
+        getSortedAscArrayByName();
+        sortedDescJsonArray = new JsonArray();
+        getSortedDescArrayByName();
+
         jsonQuickSort = new JsonQuickSort();
 
     }
@@ -57,11 +57,18 @@ class JsonQuickSortTest {
         jsonArray.add(obj4);
     }
 
-    void getSortedArrayByName() {
-        sortedJsonArray.add(obj3);
-        sortedJsonArray.add(obj1);
-        sortedJsonArray.add(obj4);
-        sortedJsonArray.add(obj2);
+    void getSortedAscArrayByName() {
+        sortedAscJsonArray.add(obj3);
+        sortedAscJsonArray.add(obj1);
+        sortedAscJsonArray.add(obj4);
+        sortedAscJsonArray.add(obj2);
+    }
+
+    void getSortedDescArrayByName() {
+        sortedDescJsonArray.add(obj2);
+        sortedDescJsonArray.add(obj4);
+        sortedDescJsonArray.add(obj1);
+        sortedDescJsonArray.add(obj3);
     }
 
     void initJsonObjects() {
@@ -79,26 +86,37 @@ class JsonQuickSortTest {
     }
 
     @Test
-    void testQuickSort() {
+    @DisplayName("Test quick sort on array containing json objects with indicated ascending sort order")
+    void testQuickSortAscending() {
         JsonArray result = jsonQuickSort.quickSort(jsonArray, attributeName, SortingOrder.ASCENDING);
 
-        assertArrayEquals(result.asList().toArray(), sortedJsonArray.asList().toArray());
+        assertArrayEquals(result.asList().toArray(), sortedAscJsonArray.asList().toArray());
     }
 
     @Test
+    @DisplayName("Test quick sort on array containing json objects with indicated descending sort order")
+    void testQuickSortDescending() {
+        JsonArray result = jsonQuickSort.quickSort(jsonArray, attributeName, SortingOrder.DESCENDING);
+
+        assertArrayEquals(result.asList().toArray(), sortedDescJsonArray.asList().toArray());
+    }
+
+    @Test
+    @DisplayName("Test quick sort on array containing json objects with indicated max number of iterations")
     void testLimitedQuickSort() {
 
         JsonArray result = spyJsonQuickSort.limitedQuickSort(jsonArray, attributeName, SortingOrder.ASCENDING, 3);
 
         verify(spyJsonQuickSort, atLeast(1)).limitedQuick(any(JsonArray.class), anyInt(), anyInt(), anyString(), anyInt());
-        assertArrayEquals(result.asList().toArray(), sortedJsonArray.asList().toArray());
+        assertArrayEquals(result.asList().toArray(), sortedAscJsonArray.asList().toArray());
     }
 
     @Test
+    @DisplayName("Test 'run' quick sort on array containing json objects")
     void testRunQuickSort() {
 
-        when(sortedJsonDataResponse.getSortedData()).thenReturn(sortedJsonArray);
-        when(spyJsonQuickSort.quickSort(jsonArray, attributeName, SortingOrder.ASCENDING)).thenReturn(sortedJsonArray);
+        when(sortedJsonDataResponse.getSortedData()).thenReturn(sortedAscJsonArray);
+        when(spyJsonQuickSort.quickSort(jsonArray, attributeName, SortingOrder.ASCENDING)).thenReturn(sortedAscJsonArray);
 
         SortedJsonDataResponse result = spyJsonQuickSort.run(jsonArray, attributeName, SortingOrder.ASCENDING);
 
@@ -107,11 +125,12 @@ class JsonQuickSortTest {
     }
 
     @Test
+    @DisplayName("Test 'run' quick sort on array containing json objects with indicated max number of iterations")
     void testRunLimitedQuickSort() {
         int iterationNumber = 3;
 
-        when(sortedJsonDataResponse.getSortedData()).thenReturn(sortedJsonArray);
-        when(spyJsonQuickSort.limitedQuickSort(jsonArray, attributeName, SortingOrder.ASCENDING, iterationNumber)).thenReturn(sortedJsonArray);
+        when(sortedJsonDataResponse.getSortedData()).thenReturn(sortedAscJsonArray);
+        when(spyJsonQuickSort.limitedQuickSort(jsonArray, attributeName, SortingOrder.ASCENDING, iterationNumber)).thenReturn(sortedAscJsonArray);
 
         SortedJsonDataResponse result = spyJsonQuickSort.run(jsonArray, attributeName, iterationNumber, SortingOrder.ASCENDING);
 

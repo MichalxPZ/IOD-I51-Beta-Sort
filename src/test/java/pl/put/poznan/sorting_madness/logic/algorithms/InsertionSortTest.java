@@ -15,18 +15,12 @@ import static org.mockito.Mockito.*;
 
 class InsertionSortTest {
 
-    List<String> listOfStrings;
+    List<String> listOfStrings, sortedListOfStrings, emptyList;
 
-    List<String> sortedListOfStrings;
-
-    List<Integer> listOfIntegers;
-
-    List<Integer> sortedlistOfIntegers;
-
-    List<String> emptyList;
+    List<Integer> listOfIntegers, sortedlistOfIntegers;
 
     InsertionSort insertionSortClass;
-    
+
     @Mock
     SortedDataResponse<String> sortedDataResponseString;
 
