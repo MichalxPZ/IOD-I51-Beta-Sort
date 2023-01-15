@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'beta-sort'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FD1FE8EEA7B449BC92AAA78927776776 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8F4A9580C3D045558F5AE468D314BA43 }}
           package: '*.war'
