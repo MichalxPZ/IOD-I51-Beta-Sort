@@ -1,9 +1,7 @@
-
-
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - Beta-Sort
+name: Build and deploy JAR app to Azure Web App - beta-sort
 
 on:
   push:
@@ -49,7 +47,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'Beta-Sort'
+          app-name: 'beta-sort'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A613AC90B1BF491BB165C284C852620E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9EA86A86EC654201B399F01C749BB76A }}
           package: '*.jar'
